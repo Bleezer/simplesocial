@@ -1,0 +1,50 @@
+{% extends "groups/group_base.html" %}
+
+{% block pregroup %}
+
+    <div class="col-md-4">
+      <div class="content">
+          {% if user.is_authenticated %}
+            <h2>Welcome Back!</h2>
+              <a href="{% url 'posts:for_user' username=user.username %}">@{{ user.username }}</a>
+          {% endif %}
+          <h2>Groups</h2>
+          <p>Welcome to the groups page!</p>
+
+      </div>
+      {% if user.is_authenticated %}
+        <h2>Welcome Back!</h2>
+          <a href="{% url 'groups:create' %}" class="btn btn-md btn-fill btn-warning">
+            <span class="glyphicon glyphicon-plus-sign">Create New Group!</span>
+          </a>
+      {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block group_content %}
+
+  <div class="col-md-8">
+    <div class="list=group">
+       {% for group in object_list %} {# Elvileg a views.py-ból jön ez is. While this view is executing, self.object_list will contain the list of objects (usually, but not necessarily a queryset) that the view is operating upon.#}
+          <a class='list-group-item' href="{% url 'groups:single' slug=group.slug %}">
+            <h3 class="title list-group-item-heading">{{ group.name }}</h3>
+       			<div class="list-group-item-text container-fluid">
+       				 {{ group.description_html|safe }} {# safe nélkül átalakítja a django például az italicot vagy a bold-ot (elé írja, hogy ez bold), így viszont megjelöljük, hogy biztonságos és be lehet szúrni egy az egyben dőltként, magyarul ezzel kikapcsoljuk a security funckciót ami összebaszná a feliratot#}
+       				<div class="row">
+       					<div class="col-md-4">
+       						<span class="badge">{{ group.members.count }}</span> member{{ group.members.count|pluralize }} {# Ezzel lehet szépen többesszámot formázni (odateszi az s-t ha a visszaadott érték nem 1). Returns a plural suffix if the value is not 1. By default, this suffix is 's'.#}
+       					</div>
+       					<div class="col-md-4">
+       						<span class="badge">{{ group.posts.count }}</span> post{{ group.posts.count|pluralize }}
+       					</div>
+       				</div>
+       			</div>
+          </a>
+
+      {% endfor %}
+
+    </div>
+  </div>
+
+{% endblock %}
