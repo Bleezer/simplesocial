@@ -21,7 +21,7 @@
       <h2>No post in this group yet!</h2>
     {% else %}
       {% for post in group.posts.all %}
-          {% include "post/_post.html" %} {# olyan mint az extend, csak htlm közepébe lehet belőni, nem kell a _ , de jó ha így van, mert így jelölhető, hogy ez egy olyan darabka #}
+          {% include "posts/_post.html" %} {# olyan mint az extend, csak htlm közepébe lehet belőni, nem kell a _ , de jó ha így van, mert így jelölhető, hogy ez egy olyan darabka #}
       {% endfor %}
     {% endif %}
 

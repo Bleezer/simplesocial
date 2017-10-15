@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify # slugify(value) = If value is "Joel is a slug", the output will be "joel-is-a-slug"
-
+from django.core.urlresolvers import reverse
 # import misaka #  fast HTML renderer and functionality to make custom renderers
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -13,20 +13,20 @@ register = template.Library()
 class Group(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(allow_unicode=True, unique=True)
-    desciption = models.TextField(blank=True,default='')
-    desciption_html = models.TextField(editable=False,default='',blank=True)
+    description = models.TextField(blank=True,default='')
+    description_html = models.TextField(editable=False,default='',blank=True)
     members = models.ManyToManyField(User,through='GroupMember')
 
     def __str__(self):
         return self.name
 
-    def save(self,*argrs,**kwargs):
+    def save(self,*args,**kwargs):
         self.slug = slugify(self.name)
-        self.desciption = self.desciption # itt lenne: misaka.html(self.desciption)
+        self.description = self.description # itt lenne: misaka.html(self.description)
         super().save(*args,**kwargs)
 
     def get_absolute_url(self):
-        return reverse('group:singe',kwargs={'slug':self.slug})
+        return reverse('groups:single',kwargs={'slug':self.slug})
 
     class Meta:
         ordering = ['name']
